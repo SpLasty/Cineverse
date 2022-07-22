@@ -5,6 +5,7 @@ const profile = require('./routes/api/profile')
 const discussion = require('./routes/api/discussion')
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const dotenv = require('dotenv').config();
 
 
 
@@ -44,7 +45,7 @@ app.use('/api/users',users);
 app.use('/api/profile',profile);
 app.use('/api/discussion',discussion);
 
-const port = 5000;
+const port = process.env.PORT;
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)

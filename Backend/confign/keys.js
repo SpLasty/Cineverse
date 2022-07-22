@@ -1,4 +1,6 @@
+const dotenv = require('dotenv').config();
+
 module.exports = {
-    mongoURI: 'mongodb+srv://kpolice507:195864@cluster0.xkp5qn8.mongodb.net/?retryWrites=true&w=majority',
+    mongoURI: process.env.MONGODB_URI,
     secretOrKey: 'secret'
 }
