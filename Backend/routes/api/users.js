@@ -7,12 +7,22 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../confign/keys');
 const passport = require('passport');
 
+const Joi = require('joi');
+const { validateSignup } = require('../../Validations/Validator');
 router.get('/routes', (req,res) => {
     res.json({notice:'user route works'})
 });
 
 
+
 router.post('/register', (req,res)=> {
+    const {error} = validateSignup(req.body)
+    if (error){
+        console.log(error);
+        return res.send(error.message)
+    }
+    
+    
     User.findOne({ email: req.body.email })
         .then(user =>{
             if(user){
@@ -30,7 +40,7 @@ router.post('/register', (req,res)=> {
                     password: req.body.password
                 });
 
-                bcrypt.genSalt(8, (err,salt) =>{
+                bcrypt.genSalt(12, (err,salt) =>{
                     bcrypt.hash(newUser.password,salt,(err,hash)=>{
                         if(err) throw err;
                         newUser.password = hash;
@@ -62,7 +72,7 @@ router.post('/login',(req,res)=>{
                 jwt.sign(payload,keys.secretOrKey, { expiresIn: 7200 }, (err,token) =>{
                     res.json({
                         success: true,
-                        token: 'Bearer' + token
+                        token: 'Bearer ' + token
                     })
                 });
             }
